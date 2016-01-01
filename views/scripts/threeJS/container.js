@@ -15,7 +15,8 @@ $().ready(function(){
     function init(bodies){
         var container = $("#container").eq(0);
    
-        camera = new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,1,10000);
+        var camera_proportions = parseInt(container.css('width'))/parseInt(container.css('height'));
+        camera = new THREE.PerspectiveCamera(70,camera_proportions,1,10000);
         camera.position.z = 600;
 
         scene = new THREE.Scene();
@@ -36,8 +37,9 @@ $().ready(function(){
         requestAnimationFrame(function(){
             animation(bodies);
         });
-        bodies[0].rotation.y += Math.PI/180*0.5;
-        bodies[0].rotation.x += Math.PI/180*0.5;
+        for(var i=0; i<bodies.length; i++){
+            bodies[i].animation();
+        }
         render.render(scene, camera);
     }
 });
@@ -52,6 +54,32 @@ function createCube(){
     cube.mytype = 'cube';
     cube.myname = cube.mytype+'_'+cube.myid;
     cube.form = Object();
+    cube.animSpeed = {                 //свойство включено в шаблон
+        'rotation' : {
+            'x' : 0,
+            'y' : 0,
+            'z' : 0
+        },
+        'position' : {
+            'x' : 0,
+            'y' : 0,
+            'z' : 0
+        }
+    };
+    
+    cube.animation = function(){        //метод включен в шаблон
+        for(var k in this.animSpeed.rotation){
+            if(this.animSpeed.rotation[k]){
+                this.rotation[k] += Math.PI/180*this.animSpeed.rotation[k]/40;
+            }
+        }
+        for(var k in this.animSpeed.position){
+            if(this.animSpeed.position[k]){
+                this.position[k] += this.animSpeed.position[k];
+            }
+        }
+    }
+    
     cube.resize = function(x,y,z){
         for(var k=0; k<this.geometry.vertices.length; k++){
             var old_x = this.geometry.vertices[k].x;
@@ -74,55 +102,70 @@ function createCube(){
     //Создание панели свойств фигуры
     function createPropertiesPanel(){
         var form = $('<form>');
-        var position = createPositionPanel(cube.position.x,cube.position.y,cube.position.z);
-        var rotation = createRotationPanel(cube.rotation.x,cube.rotation.y,cube.rotation.z);
+        var position = createPositionPanel(cube,cube.position.x,cube.position.y,cube.position.z);
+        var rotation = createRotationPanel(cube,cube.rotation.x,cube.rotation.y,cube.rotation.z);
+        var anim_rotation = createAnimRotationPanel(cube,cube.animSpeed.rotation);
 
-        form.append(position).append(rotation);
+        form.append(position).append(rotation).append(anim_rotation);
         
-        form.change(function(){
-            cube.position.x = $("[name = 'pos_x']", $(this)).val();
-            cube.position.y = $("[name = 'pos_y']", $(this)).val();
-            cube.position.z = $("[name = 'pos_z']", $(this)).val();
-            cube.rotation.x = $("[name = 'rot_x']", $(this)).val()/180*Math.PI;
-            cube.rotation.y = $("[name = 'rot_y']", $(this)).val()/180*Math.PI;
-            cube.rotation.z = $("[name = 'rot_z']", $(this)).val()/180*Math.PI;
+        $('input', form).change(function(){
+            var key = $(this).attr('name').split('_');
+            var val = +this.value;
+            if(key[0] == 'rotation'){
+               val = val/180*Math.PI; 
+            }
+            if(key.length === 2){
+                cube[key[0]][key[1]] = val;
+            }else if(key.length === 3){
+                cube[key[0]][key[1]][key[2]] = val;
+            }
         });
         return form;
     }
-    
     return cube;
 }
 
-function createPositionPanel(x,y,z){
+function createPositionPanel(body,x,y,z){
     var coord = {'x':x, 'y':y, 'z':z};
     var div = $("<div>").addClass('position_panel');
-    
     for(var k in coord){
         var inp = $("<input>").attr({
             'type': 'number',
-            'name': 'pos_'+k,
+            'name': 'position_'+k,
             'value': coord[k]
-        }).css({'width': '50px'});
-        var label = $("<label>").append(k+':').append(inp);
+            }).css({'width': '50px'});
+        var label = $("<label>").append('p.'+k+':').append(inp);
         div.append(label);
     }
-    
     return div;
 }
-function createRotationPanel(x,y,z){
+
+function createRotationPanel(body,x,y,z){
     var rot = {'x':x, 'y':y, 'z':z};
     var div = $("<div>").addClass('rotation_panel');
-    
     for(var k in rot){
         var inp = $("<input>").attr({
             'type': 'number',
-            'name': 'rot_'+k,
+            'name': 'rotation_'+k,
             'value': (rot[k]/Math.PI*180)%360
-        }).css({'width': '50px'});
-        var label = $("<label>").append('r_'+k+':').append(inp);
+            }).css({'width': '50px'});
+        var label = $("<label>").append('r.'+k+':').append(inp);
         div.append(label);
     }
-    
+    return div;
+}
+function createAnimRotationPanel(body, speed){
+    var rot = {'x':speed.x, 'y':speed.y, 'z':speed.z};
+    var div = $("<div>").addClass('anim_rotation_panel');
+    for(var k in rot){
+        var inp = $("<input>").attr({
+            'type': 'number',
+            'name': 'animSpeed_rotation_'+k,
+            'value': rot[k]
+            }).css({'width': '50px'});
+        var label = $("<label>").append('a.r.'+k+':').append(inp);
+        div.append(label);
+    }
     return div;
 }
 

@@ -10,7 +10,7 @@
         <script src="views/scripts/jquery-2.1.4.min.js"></script>
         <script src="views/scripts/three.min.js"></script>
         <script src="views/scripts/threeJS/container.js"></script>
-        <script src="views/scripts/interface/formGetScript.js"></script>
+        <script src="views/scripts/interface/handlers.js"></script>
     </head>
     <body>
         <div id="container"></div>
@@ -20,10 +20,6 @@
             <form method="POST" id="form_get_script">
                 <input type="submit" value="Получить файл"/>
                 <input type="hidden" name="json_bodies" value=""/>
-<!--                <input type="hidden" name="json_bodies" value=""/>
-                <input type="hidden" name="json_scene" value=""/>
-                <input type="hidden" name="json_camera" value=""/>
-                <input type="hidden" name="json_render" value=""/>-->
             </form>
         </div>
     </body>

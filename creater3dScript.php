@@ -1,12 +1,9 @@
 <?php
-//$json_bodies = '';
-//$json_scene = '';
-//$json_camera = '';
-//$json_render = '';
-
 if(
-    isset($_POST['json_bodies'])
+    isset($_POST['json_bodies'])&&
+    isset($_COOKIE['form_get_script'])
 ){
+    setcookie('form_get_script', 1, time()-3600);
     $json_bodies = $_POST['json_bodies'];
             
     $script = <<<SCRIPT
@@ -23,6 +20,7 @@ if(
                 equilObjects(body.position, bodies_prop[i].position);
                 equilObjects(body.rotation, bodies_prop[i].rotation);
                 equilObjects(body.geometry.vertices, bodies_prop[i].vertices);
+                equilObjects(body.animSpeed, bodies_prop[i].animSpeed);
                 bodies.push(body);
             }
             
@@ -31,7 +29,7 @@ if(
             function init(bodies){
                 var container = $("#container").eq(0);
 
-                var camera_proportions = parseInt($("#container").css('width'))/parseInt($("#container").css('height'));
+                var camera_proportions = parseInt(container.css('width'))/parseInt(container.css('height'));
                 camera = new THREE.PerspectiveCamera(70,camera_proportions,1,10000);
                 camera.position.z = 600;
 
@@ -53,8 +51,9 @@ if(
                 requestAnimationFrame(function(){
                     animation(bodies);
                 });
-                bodies[0].rotation.y += Math.PI/180*0.5;
-                bodies[0].rotation.x += Math.PI/180*0.5;
+                for(var i=0; i<bodies.length; i++){
+                    bodies[i].animation();
+                }
                 render.render(scene, camera);
             }
         });
@@ -62,8 +61,36 @@ if(
             var cube_geometry = new THREE.BoxGeometry(300,300,300);
             var cube_texture = new THREE.MeshNormalMaterial({wireframe: false ,wireframeLinewidth: 3, morphTargets: true});
             var cube = new THREE.Mesh(cube_geometry, cube_texture);
+            
+            cube.animSpeed = {
+                'rotation' : {
+                    'x' : 0,
+                    'y' : 0,
+                    'z' : 0
+                },
+                'position' : {
+                    'x' : 0,
+                    'y' : 0,
+                    'z' : 0
+                }
+            };
+
+            cube.animation = function(){
+                for(var k in this.animSpeed.rotation){
+                    if(this.animSpeed.rotation[k]){
+                        this.rotation[k] += Math.PI/180*this.animSpeed.rotation[k]/40;
+                    }
+                }
+                for(var k in this.animSpeed.position){
+                    if(this.animSpeed.position[k]){
+                        this.position[k] += this.animSpeed.position[k];
+                    }
+                }
+            }
+   
             return cube;
         }
+            
         function equilObjects(targ, orig){
             for(var key_o in orig){
                 var key_t = key_o;
@@ -78,7 +105,4 @@ SCRIPT;
     $fd = fopen('./tmp/3dScript.js', 'w');
     fwrite($fd, $script);
     fclose($fd);
-    
-//    var_dump(json_decode($json_bodies)[1]);
-//    die;
 }
