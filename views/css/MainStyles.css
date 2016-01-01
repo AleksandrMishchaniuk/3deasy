@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#container{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+#bsb{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+#lsb{
+    position: fixed;
+    left: 0;
+    top: 0;
+    /*width: 200px;*/
+    min-height: 200px;
+}
+
+.panel{
+    background: silver;
+    opacity: 0.3;
+    padding: 5px 10px;
+}
+.panel:hover{
+    opacity: 0.8;
+}
