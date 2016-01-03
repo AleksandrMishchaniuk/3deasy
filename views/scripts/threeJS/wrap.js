@@ -9,10 +9,10 @@ function saveToGlobal(bodies,camera,render){
 
 function getMoreProperties(body){
     //Отображение панели свойств фигуры
-    body.showPropertiesPanel = function(){
+    body.showPropertiesPanel = function(list){
         this.form = createPropertiesPanel(body);
-        $("#bsb").empty();
-        $("#bsb").append(this.form);
+        list.empty();
+        list.append(this.form);
     };
     return body;
 }

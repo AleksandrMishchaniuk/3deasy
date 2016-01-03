@@ -2,7 +2,7 @@ $().ready(function(){
     var scene, camera, render;
     var bodies = new Array();
     
-    bodies = getBodies();
+    bodies = getSavedCondition();
   
     init(bodies);
   
@@ -110,12 +110,34 @@ $().ready(function(){
      * ----------------------------------------------------------------------------
      */
     
-    function getBodies(){
+    function getSavedCondition(){
         var bodies1 = new Array();
-        bodies1.push(createCube());
-        bodies1.push(createCube());
-        bodies1[0].resize(50,200,300);
-        bodies1[1].position.x = 300;
+        if(localStorage.getItem('newCondition') !== null){
+            localStorage.removeItem('newCondition');
+            localStorage.removeItem('currentCondition');
+        }
+        if(localStorage.getItem('currentCondition') !== null){
+            var bodies_prop = JSON.parse(localStorage.getItem('currentCondition'));
+            for(var i=0; i<bodies_prop.length; i++){
+                var body = new Object();
+                if(bodies_prop[i].mytype === 'cube'){
+                    body = createCube();
+                }
+                body.mytype = bodies_prop[i].mytype;
+                body.myid = bodies_prop[i].myid;
+                body.myname = bodies_prop[i].myname;
+                equilObjects(body.position, bodies_prop[i].position);
+                equilObjects(body.rotation, bodies_prop[i].rotation);
+                equilObjects(body.geometry.vertices, bodies_prop[i].vertices);
+                equilObjects(body.animSpeed, bodies_prop[i].animSpeed);
+                bodies1.push(body);
+            }
+        }else{
+            bodies1.push(createCube());
+            bodies1.push(createCube());
+            bodies1[0].resize(50,200,300);
+            bodies1[1].position.x = 300;
+        }
         return bodies1;
     }
 });

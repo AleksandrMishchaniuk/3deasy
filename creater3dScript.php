@@ -9,12 +9,12 @@ if(
     
     $filepath = './views/scripts/threeJS/template.js';  //путь к шаблону
     $fd = fopen($filepath, 'r');
-    $script = fread($fd, 3408+56);  //!!!!--Надо определить количество символов для считывания из шаблона--!!!!!
+    $script = fread($fd, 3416+56);  //!!!!--Надо определить количество символов для считывания из шаблона--!!!!!
     fclose($fd);
     
     $script .= <<<SCRIPT
         
-        function getBodies(){
+        function getSavedCondition(){
             var bodies1 = new Array();
             
             var bodies_prop = JSON.parse('{$json_bodies}');
@@ -24,6 +24,9 @@ if(
                 if(bodies_prop[i].mytype === 'cube'){
                     body = createCube();
                 }
+                body.mytype = bodies_prop[i].mytype;
+                body.myid = bodies_prop[i].myid;
+                body.myname = bodies_prop[i].myname;
                 equilObjects(body.position, bodies_prop[i].position);
                 equilObjects(body.rotation, bodies_prop[i].rotation);
                 equilObjects(body.geometry.vertices, bodies_prop[i].vertices);
