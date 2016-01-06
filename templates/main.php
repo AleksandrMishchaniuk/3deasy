@@ -15,10 +15,4 @@
         <div id='bsb' class="panel"></div>
         <div id="lsb" class="panel">
             <div id="list_of_bodies"></div>
-            <form method="POST" id="form_get_script">
-                <input type="submit" value="Получить файл скрипта"/>
-                <input type="hidden" name="json_bodies" value=""/>
-            </form>
-            <button id="button_newCondition">Создать новый проект</button>
         </div>
-        <div id="rsb" class="panel">

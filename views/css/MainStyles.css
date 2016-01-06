@@ -29,6 +29,12 @@
     /*width: 200px;*/
     min-height: 200px;
 }
+#project_info{
+    position: fixed;
+    left: 200px;
+    top: 0;
+    /*width: 200px;*/
+}
 
 .panel{
     background: silver;

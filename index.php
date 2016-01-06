@@ -1,5 +1,7 @@
 <?php
+    session_start();
     include './config/config.php';
+    include './config/db.php';
     include './functions/mainFunctions.php';
     include './creater3dScript.php';
     
