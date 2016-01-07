@@ -4,5 +4,9 @@
         <input type="password" name="pass" placeholder="Пароль" required/><br/>
         <input type="submit" value="Войти"/>
     </form>
-    <a href="?controller=user&action=startRegistration">Зарегистрироваться</a>
-    <div class="message"><?php echo $message; ?></div>
+    <a href="?controller=user&action=registration">Зарегистрироваться</a>
+    <div class="message">
+        <?php 
+            if(isset($message)) {echo $message;}
+        ?>
+    </div>

@@ -8,7 +8,7 @@
  * @return type
  */
 function getUserByLoginAndPassword($login, $pass){
-    global $db;
+    $db = getDBConection();
     $user = NULL;
     $query = "SELECT id, login FROM `users`".
             " WHERE (`login` = ? and `password` = ?)".
@@ -24,4 +24,37 @@ function getUserByLoginAndPassword($login, $pass){
         }
     }
     return $user;
+}
+
+/**
+ * 
+ * @param type $login
+ * @return boolean
+ */
+function isExistUserByLogin($login){
+    $db = getDBConection();
+    $query = "SELECT login FROM `users`".
+            " WHERE `login` = ?";
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("s", $login);
+    $stmt->execute();
+    if ($stmt->fetch()){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/**
+ * 
+ * @param type $login
+ * @param type $pass
+ * @return type
+ */
+function registrationNewUser($login, $pass){
+    $db = getDBConection();
+    $query = "INSERT INTO `users` (login,  password)".
+            " VALUES (?, ?)";
+    $stmt = $db->prepare($query);
+    $stmt->bind_param("ss", $login, $pass);
+    return $stmt->execute();
 }

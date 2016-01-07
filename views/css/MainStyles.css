@@ -44,3 +44,15 @@
 .panel:hover{
     opacity: 0.8;
 }
+
+#projects_list{
+    height: 200px;
+    overflow: auto;
+}
+
+.active{
+    border: 1px solid #6495ED;
+}
+.selected{
+    background: #6495ED;
+}

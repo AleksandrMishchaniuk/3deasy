@@ -4,16 +4,35 @@ $().ready(function(){
     
     $('#form_get_script').submit(function(){
         var bodies_json = JSON.stringify( getCurrentCondition() );
-        document.cookie = 'form_get_script=1';
         $("[name='json_bodies']").val(bodies_json);
+    });
+    $('#saveAsNewProject').submit(function(){
+        var bodies_json = JSON.stringify( getCurrentCondition() );
+        $("[name='new_proj_data']").val(bodies_json);
+    });
+    $("#newCondition").submit(function(){
+        localStorage.setItem('newCondition','1');
+    });
+    $('#openProject').submit(function(){
+        var id = $('#projects_list li.selected').attr('data-id');
+        $("[name='opening_project']").val(id);
+    });
+    
+    
+    $("#projects_list li").click(function(){
+        $("#projects_list li").each(function(){
+            $(this).removeClass('selected');
+        });
+        $(this).addClass('selected');
+    });
+    
+    
+    $('form').submit(function(){
+        document.cookie = 'form=1';
     });
     
     $(window).unload(function(){
         localStorage.setItem('currentCondition', JSON.stringify( getCurrentCondition() ));
-    });
-    $("#button_newCondition").click(function(){
-        localStorage.setItem('newCondition','1');
-        location.reload();
     });
 });
 

@@ -1,9 +1,9 @@
 <?php
 if(
     isset($_POST['json_bodies'])&&
-    isset($_COOKIE['form_get_script'])
+    isset($_COOKIE['form'])
 ){
-    setcookie('form_get_script', 1, time()-3600);
+    setcookie('form', 1, time()-3600);
     $json_bodies = $_POST['json_bodies'];
             
     

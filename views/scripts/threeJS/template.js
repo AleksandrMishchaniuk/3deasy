@@ -109,7 +109,6 @@ $().ready(function(){
      * Конец шаблона--------------------------------------------------------------
      * ----------------------------------------------------------------------------
      */
-    
     function getSavedCondition(){
         var bodies1 = new Array();
         if(localStorage.getItem('newCondition') !== null){
