@@ -3,6 +3,11 @@
 include './models/UsersModel.php';
 include './models/ProjectsModel.php';
 
+/**
+ * 
+ * @param type $errors
+ * @param type $entered_name
+ */
 function indexAction($errors = NULL, $entered_name = ''){
     $user = getUserFromSession();
     if(!$user){
@@ -21,6 +26,7 @@ function indexAction($errors = NULL, $entered_name = ''){
     include TPL_RSB_PATH . 'userRsb.php';
     include TPL_PATH . 'end.php';
 }
+
 /**
  * 
  * @global type $db
@@ -137,11 +143,62 @@ function saveAsNewProjectAction(){
     indexAction($errors, $entered_name);
 }
 
-
+/**
+ * 
+ */
 function openProjectAction(){
     $errors = NULL;
     if(isset($_POST['opening_project']) && isset($_COOKIE['form'])){
         setcookie('form', 1, time()-3600);
-        
+        $proj_id = intval($_POST['opening_project']);
+        if($proj_id === 0){
+            $errors[] = 'Проект не выбран';
+        }
+        if(!$errors){
+            $user_id = getUserFromSession()['id'];
+            $opening_project = getProjectByIdAndUserId($proj_id, $user_id);
+            if($opening_project['id']){
+                $_SESSION['project'] = $opening_project;
+                $_SESSION['opening_project_data'] = getProjectDataById($opening_project['id']);
+            }else{
+                $errors[] = 'Произошла ошибка доступа к базе данных';
+            }
+        }
     }
+    
+    indexAction($errors);
+}
+
+function deleteProjectAction(){
+    $errors = NULL;
+    if(isset($_POST['deleting_project']) && isset($_COOKIE['form'])){
+        setcookie('form', 1, time()-3600);
+        $proj_id = intval($_POST['deleting_project']);
+        if($proj_id === 0){
+            $errors[] = 'Проект не выбран';
+        }
+        if($proj_id === getProjectFromSession()['id']){
+            $errors[] = 'Зактойте проект перед удалением';
+        }
+        if(!$errors){
+            $user_id = getUserFromSession()['id'];
+            if(!deleteProjectByIdAndUserId($proj_id, $user_id)){
+                $errors[] = 'Произошла ошибка доступа к базе данных';
+            }
+        }
+    }
+    indexAction($errors);
+}
+
+function saveProjectAction(){
+    $errors = NULL;
+    if(isset($_POST['project_data']) && isset($_COOKIE['form'])){
+        setcookie('form', 1, time()-3600);
+        $data = $_POST['project_data'];
+        $proj_id = getProjectFromSession()['id'];
+        if(!saveProject($proj_id, $data)){
+            $errors[] = 'Произошла ошибка доступа к базе данных';
+        }
+    }
+    indexAction($errors);
 }

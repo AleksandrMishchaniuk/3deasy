@@ -17,6 +17,14 @@ $().ready(function(){
         var id = $('#projects_list li.selected').attr('data-id');
         $("[name='opening_project']").val(id);
     });
+    $('#deleteProject').submit(function(){
+        var id = $('#projects_list li.selected').attr('data-id');
+        $("[name='deleting_project']").val(id);
+    });
+    $('#saveProject').submit(function(){
+        var bodies_json = JSON.stringify( getCurrentCondition() );
+        $("[name='project_data']").val(bodies_json);
+    });
     
     
     $("#projects_list li").click(function(){
@@ -24,6 +32,10 @@ $().ready(function(){
             $(this).removeClass('selected');
         });
         $(this).addClass('selected');
+        $('#deleteProject [type="submit"]').removeAttr('disabled');
+        if($(this).hasClass('active')){
+            $('#deleteProject [type="submit"]').attr('disabled','disabled');
+        }
     });
     
     

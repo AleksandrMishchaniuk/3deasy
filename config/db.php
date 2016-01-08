@@ -8,9 +8,9 @@ function getDBConection(){
 
     $db = new mysqli($dblocation, $dbuser, $dbpwd, $dbname);
 
-    if(!$db){
-    //    echo 'Ошибка доступа к mySQL';
-        $message = 'Ошибка доступа к mySQL';
+    if ($db->connect_error) {
+        die('Ошибка подключения (' . $db->connect_errno . ') '
+                . $db->connect_error);
     }
 
     mysqli_set_charset($db, 'utf8');

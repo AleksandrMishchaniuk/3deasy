@@ -6,6 +6,14 @@
         <link rel="stylesheet" href="views/css/MainStyles.css"/>
         <script src="views/scripts/jquery-2.1.4.min.js"></script>
         <script src="views/scripts/three.min.js"></script>
+        <?php if(isset($_SESSION['opening_project_data'])): ?>
+            <script>
+                localStorage.setItem('currentCondition', '<?php echo $_SESSION['opening_project_data'] ?>');
+            </script>
+        <?php
+            unset($_SESSION['opening_project_data']);
+            endif; 
+        ?>
         <script src="views/scripts/threeJS/template.js"></script>
         <script src="views/scripts/threeJS/wrap.js"></script>
         <script src="views/scripts/interface/handlers.js"></script>

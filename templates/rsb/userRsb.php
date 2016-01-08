@@ -25,9 +25,9 @@
         </form>
     <?php endif; ?>
     <?php if(isset($project['id'])): ?>
-    <form action="?controller=user&action=saveProject" id="saveProject" method="POST">
+        <form action="?controller=user&action=saveProject" id="saveProject" method="POST">
             <input type="submit" value="Сохранить проект"/>
-            <input type="hidden" name="saving_project" value=""/>
+            <input type="hidden" name="project_data" value=""/>
         </form>
     <?php endif; ?>
     <form action="?controller=user&action=saveAsNewProject" id="saveAsNewProject" method="POST">
