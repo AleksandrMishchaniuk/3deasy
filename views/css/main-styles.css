@@ -2,6 +2,9 @@
     margin: 0;
     padding: 0;
 }
+hr{
+    margin: 5px auto;
+}
 #container{
     position: fixed;
     left: 0;
@@ -36,12 +39,12 @@
     /*width: 200px;*/
 }
 
-.panel{
+.app-panel{
     background: silver;
     opacity: 0.3;
     padding: 5px 10px;
 }
-.panel:hover{
+.app-panel:hover{
     opacity: 0.8;
 }
 

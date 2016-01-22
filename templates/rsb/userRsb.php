@@ -1,8 +1,8 @@
-<div id="rsb" class="panel">
     <div class="congratulation">Привет, <?php echo ucfirst($user['login']); ?>!</div>
     <form action="?controller=user&action=quit" method="POST">
         <input type="submit" name="quit_user" value="Выйти"/>
     </form>
+    <hr/>
     <div id="projects_list">
         <ul>
             <?php 

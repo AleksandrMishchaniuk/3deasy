@@ -5,22 +5,45 @@ $().ready(function(){
     $('#form_get_script').submit(function(){
         var bodies_json = JSON.stringify( getCurrentCondition() );
         $("[name='json_bodies']").val(bodies_json);
+        
+        var file_name = ($('#project_info').html() !== undefined)? $('#project_info').html().trim(): 'new_project';
+        var text = 'Введите имя файла.\n';
+        text += '(оно также будет использоваться в качестве идентификатора html-блока';
+        text += 'в котором потребуется отобразить созданный проект)\n';
+        text += 'Допускаются только латинские буквы, цифры и символ подчеркивания';
+        file_name = prompt(text, file_name);
+        try{
+            file_name = file_name.replace(/[^A-Za-z0-9_]+/g, "_");
+        }catch(ex){
+            return false;
+        }
+        if(!file_name || file_name==='_'){
+            alert('Введено недопустимое имя файла');
+            return false;
+        }
+        $("[name='file_name']").val(file_name);
     });
+    
+    
     $('#saveAsNewProject').submit(function(){
         var bodies_json = JSON.stringify( getCurrentCondition() );
         $("[name='new_proj_data']").val(bodies_json);
     });
+    
     $("#newCondition").submit(function(){
         localStorage.setItem('newCondition','1');
     });
+    
     $('#openProject').submit(function(){
         var id = $('#projects_list li.selected').attr('data-id');
         $("[name='opening_project']").val(id);
     });
+    
     $('#deleteProject').submit(function(){
         var id = $('#projects_list li.selected').attr('data-id');
         $("[name='deleting_project']").val(id);
     });
+    
     $('#saveProject').submit(function(){
         var bodies_json = JSON.stringify( getCurrentCondition() );
         $("[name='project_data']").val(bodies_json);
@@ -48,6 +71,12 @@ $().ready(function(){
     });
 });
 
+/**
+ * 
+ * @param {type} bodies
+ * @param {type} list
+ * @returns {undefined}
+ */
 function fillListOfBodies(bodies, list){
     var ul = $('<ul>');
     list.append(ul);
@@ -64,6 +93,10 @@ function fillListOfBodies(bodies, list){
     }
 }
 
+/**
+ * 
+ * @returns {Array|getCurrentCondition.bodies}
+ */
 function getCurrentCondition(){
     var bodies = new Array();
     for(var i=0; i<glob_bodies.length; i++){

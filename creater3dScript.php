@@ -1,15 +1,17 @@
 <?php
 if(
     isset($_POST['json_bodies'])&&
+    isset($_POST['file_name'])&&
     isset($_COOKIE['form'])
 ){
     setcookie('form', 1, time()-3600);
     $json_bodies = $_POST['json_bodies'];
-            
+    $file_name = htmlentities($_POST['file_name']);
+    
     
     $filepath = './views/scripts/threeJS/template.js';  //путь к шаблону
     $fd = fopen($filepath, 'r');
-    $script = fread($fd, 3416+56);  //!!!!--Надо определить количество символов для считывания из шаблона--!!!!!
+    $script = fread($fd, 3426+56);  //!!!!--Надо определить количество символов для считывания из шаблона--!!!!!
     fclose($fd);
     
     $script .= <<<SCRIPT
@@ -36,18 +38,21 @@ if(
             
             return bodies1;
         }
+        
+        function getContainerName(){
+            return '{$file_name}';
+        }
     });
 SCRIPT;
             
-    script_download($script);
+    script_download($script, $file_name);
 }
 
-function script_download($script) {
-    $filename = '3dScript.js';
+function script_download($script, $file_name) {
     // заставляем браузер показать окно сохранения файла
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename='.$filename);
+    header('Content-Disposition: attachment; filename='.$file_name.'.js');
     header('Content-Transfer-Encoding: binary');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');

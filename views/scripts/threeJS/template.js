@@ -7,7 +7,7 @@ $().ready(function(){
     init(bodies);
   
     function init(bodies){
-        var container = $("#container").eq(0);
+        var container = $("#"+getContainerName()).eq(0);
    
         var camera_proportions = parseInt(container.css('width'))/parseInt(container.css('height'));
         camera = new THREE.PerspectiveCamera(70,camera_proportions,1,10000);
@@ -138,5 +138,9 @@ $().ready(function(){
             bodies1[1].position.x = 300;
         }
         return bodies1;
+    }
+    
+    function getContainerName(){
+        return 'container';
     }
 });

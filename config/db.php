@@ -5,7 +5,7 @@ function getDBConection(){
     $dbname = "3deasy";
     $dbuser = 'root';
     $dbpwd = "";
-
+    
     $db = new mysqli($dblocation, $dbuser, $dbpwd, $dbname);
 
     if ($db->connect_error) {

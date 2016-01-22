@@ -1,4 +1,3 @@
-<div id="rsb" class="panel">
     <form action="?controller=user&action=registration" method="POST">
         <div class="caption">Введите данные для регистрации</div>
         <input type="text" name="new_login" placeholder="Введите логин" value="<?php echo $login; ?>" title="Логин" required/><br/>

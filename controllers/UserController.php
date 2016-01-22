@@ -18,11 +18,10 @@ function indexAction($errors = NULL, $entered_name = ''){
     
     $project = getProjectFromSession();
     if(!$project){
-        $project['name'] = 'Новый проект';
+        $project['name'] = 'new_project';
     }
     
     include TPL_PATH . 'main.php';
-    include TPL_PATH . 'projectInformation.php';
     include TPL_RSB_PATH . 'userRsb.php';
     include TPL_PATH . 'end.php';
 }
@@ -82,9 +81,9 @@ function registrationAction(){
     
     if(isset($_POST['submit']) && isset($_COOKIE['form'])){
         setcookie('form', 1, time()-3600);
-        $login = $_POST['new_login'];
-        $pass1 = $_POST['new_pass1'];
-        $pass2 = $_POST['new_pass2'];
+        $login = htmlentities($_POST['new_login']);
+        $pass1 = htmlentities($_POST['new_pass1']);
+        $pass2 = htmlentities($_POST['new_pass2']);
         if($login === ''){$errs[] = 'Введите логин';}
         if($pass1 === ''){$errs[] = 'Введите пароль';}
         if($pass2 === ''){$errs[] = 'Введите повторный пароль';}
@@ -118,7 +117,7 @@ function saveAsNewProjectAction(){
     $entered_name = '';
     if(isset($_POST['submit']) && isset($_COOKIE['form'])){
         setcookie('form', 1, time()-3600);
-        $name = $_POST['new_proj_name'];
+        $name = htmlentities($_POST['new_proj_name']);
         $data = $_POST['new_proj_data'];
         $userId = getUserFromSession()['id'];
         
